@@ -5,7 +5,6 @@ A responsive Fermor homepage built for the frontend assignment using React, Vite
 ## Submission links
 
 - Live site: https://fermor-homepage-beige.vercel.app
-- GitHub repository: https://github.com/anudeep2710/fermor-homepage
 
 ## Run locally
 
