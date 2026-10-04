@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ArrowDownRight,
   ArrowRight,
@@ -65,7 +65,7 @@ function Wordmark({ inverse = false }) {
 
 function HeroMap() {
   return (
-    <div className="hero-map-wrap">
+    <div className="hero-map-wrap" data-reveal="hero">
       <div className="hero-map-glow" aria-hidden="true" />
       <div className="hero-map">
         <div className="hero-map__topline">
@@ -145,7 +145,7 @@ function HeroMap() {
 
 function FeatureCard({ accent, icon, number, title, copy, children }) {
   return (
-    <article className={`feature-card feature-card--${accent}`}>
+    <article className={`feature-card feature-card--${accent}`} data-reveal="card">
       <div className="feature-card__header">
         <span className="feature-card__number">{number}</span>
         <span className="feature-card__icon">{icon}</span>
@@ -165,6 +165,30 @@ function App() {
   const [activeFaq, setActiveFaq] = useState(0)
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+
+  useEffect(() => {
+    const revealItems = [...document.querySelectorAll('[data-reveal]')]
+
+    if (!('IntersectionObserver' in window)) {
+      revealItems.forEach((item) => item.classList.add('is-visible'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            currentObserver.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.14, rootMargin: '0px 0px -45px' },
+    )
+
+    revealItems.forEach((item) => observer.observe(item))
+    return () => observer.disconnect()
+  }, [])
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -218,7 +242,7 @@ function App() {
           <div className="hero-section__orb hero-section__orb--one" aria-hidden="true" />
           <div className="hero-section__orb hero-section__orb--two" aria-hidden="true" />
           <div className="shell-width hero-grid">
-            <div className="hero-copy">
+            <div className="hero-copy" data-reveal="hero">
               <p className="eyebrow eyebrow--light"><span className="eyebrow__dot" /> Financial clarity, in plain English</p>
               <h1 id="hero-title">Make your money <em>make sense.</em></h1>
               <p className="hero-copy__lede">
@@ -247,7 +271,7 @@ function App() {
 
         <section className="section section--intro" id="method" aria-labelledby="method-title">
           <div className="shell-width">
-            <div className="section-heading section-heading--split">
+            <div className="section-heading section-heading--split" data-reveal="section">
               <div>
                 <p className="eyebrow eyebrow--ink">The Fermor point of view</p>
                 <h2 id="method-title">Money is a system.<br /><span>See the system.</span></h2>
@@ -304,14 +328,14 @@ function App() {
 
         <section className="section section--dark" id="reset" aria-labelledby="reset-title">
           <div className="shell-width reset-grid">
-            <div className="reset-copy">
+            <div className="reset-copy" data-reveal="section">
               <p className="eyebrow eyebrow--light"><span className="eyebrow__dot" /> A small ritual for a big picture</p>
               <h2 id="reset-title">The three-minute<br /><em>money reset.</em></h2>
               <p>Fermor helps you make a habit of clarity. Pick a moment, check the signal and leave with one thing that feels possible.</p>
               <a className="text-link text-link--light" href="#start">Make it your own <ArrowUpRight size={16} strokeWidth={1.8} /></a>
             </div>
 
-            <div className="reset-panel">
+            <div className="reset-panel" data-reveal="panel">
               <div className="reset-panel__rail" aria-hidden="true">
                 {steps.map((step, index) => (
                   <button
@@ -349,13 +373,13 @@ function App() {
 
         <section className="section section--audience" aria-labelledby="audience-title">
           <div className="shell-width audience-grid">
-            <div className="audience-stamp" aria-hidden="true">
+            <div className="audience-stamp" data-reveal="stamp" aria-hidden="true">
               <div className="audience-stamp__ring audience-stamp__ring--one" />
               <div className="audience-stamp__ring audience-stamp__ring--two" />
               <span>money<br /><strong>for real life</strong></span>
               <ArrowUpRight size={26} strokeWidth={1.5} />
             </div>
-            <div className="audience-copy">
+            <div className="audience-copy" data-reveal="section">
               <p className="eyebrow eyebrow--ink">Built for the in-between</p>
               <h2 id="audience-title">You don’t need a perfect plan.<br /><span>You need a truer one.</span></h2>
               <p>For the first good salary. The new city. The family chat. The side project. The version of you that is still figuring out what “enough” means.</p>
@@ -370,11 +394,11 @@ function App() {
 
         <section className="section section--faq" aria-labelledby="faq-title">
           <div className="shell-width faq-grid">
-            <div>
+            <div data-reveal="section">
               <p className="eyebrow eyebrow--ink">Still thinking it through?</p>
               <h2 id="faq-title">Clear answers<br /><span>before you start.</span></h2>
             </div>
-            <div className="faq-list">
+            <div className="faq-list" data-reveal="section">
               {faqs.map((faq, index) => (
                 <div className={`faq-item ${activeFaq === index ? 'faq-item--open' : ''}`} key={faq.question}>
                   <button type="button" onClick={() => setActiveFaq(activeFaq === index ? -1 : index)} aria-expanded={activeFaq === index}>
@@ -390,7 +414,7 @@ function App() {
 
         <section className="start-section" id="start" aria-labelledby="start-title">
           <div className="start-section__pattern" aria-hidden="true" />
-          <div className="shell-width start-content">
+          <div className="shell-width start-content" data-reveal="section">
             <p className="eyebrow eyebrow--dark">Your next move starts here</p>
             <h2 id="start-title">A clearer relationship<br /><em>with your money.</em></h2>
             <p>Leave your email and we’ll let you know when Fermor is ready for you.</p>

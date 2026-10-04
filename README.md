@@ -26,3 +26,4 @@ npm run build
 - A deep navy, warm paper and lime signal palette gives the brand a grounded financial tone with one memorable accent.
 - The hero's money map is a CSS/SVG illustration rather than a stock image so the product promise is visible immediately.
 - The money reset panel, FAQ accordion, mobile navigation and email capture make the homepage feel like a working experience rather than a static mockup.
+- Motion is used as a quiet signal: the money map breathes, sections reveal on scroll, and reduced-motion preferences disable the effects.
